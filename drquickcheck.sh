@@ -6,13 +6,14 @@
 
 pushd /home/auraria/
 nodeIps=`su auraria -c 'psql -d auraria_mgmt -U auraria -t -c "SELECT ipaddress from mgmtrealmnode"|xargs'`
-reviewEnabled=`su auraria -c 'psql -d auraria_mgmt -U auraria -t -c "SELECT reviewappenabled from mgmtrealm"|xargs'`
 
-if [ "$reviewEnabled" = "t" ]; then
-        echo "Review is enabled on this system"
-else
-        echo "Review NOT ENABLED"
-fi
+#Not really necessary since we are re-doing Review, but this is how you check if Review is enabled
+#reviewEnabled=`su auraria -c 'psql -d auraria_mgmt -U auraria -t -c "SELECT reviewappenabled from mgmtrealm"|xargs'`
+#if [ "$reviewEnabled" = "t" ]; then
+#       echo "Review is enabled on this system"
+#else
+#        echo "Review NOT ENABLED"
+#fi
 
 #command List
  ipAddress   () { ssh $i ip addr show|grep \/24|sed 's/inet //;s/\/.*$//'|xargs; }
@@ -34,7 +35,6 @@ fi
  drSwapUsed  () { ssh $i df -BG /opt/digitalreef|tail -1|awk '{print $3}'; }
  drSwapAvail () { ssh $i df -BG /opt/digitalreef|tail -1|awk '{print $4}'; }
  drSwapFree  () { ssh $i df -BG /opt/digitalreef|tail -1|awk '{print $5}'; }
-
 
 #Header line
 echo   "IP_Address,Hostname,CPU_count,MemTotal,DateTime,SELinux,DR_Version,Node_Type,Kernel,Filesystem,Root_Size,Root_Used,Root_Avail,Root_Free%,DR_swap_Filesystem,DR_swap_Size,DR_swap_Used,DR_swap_Avail,DR_swap_Free"
